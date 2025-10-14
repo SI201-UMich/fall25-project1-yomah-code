@@ -1,17 +1,16 @@
-# -----------------------------------------
 # SI 201 Project 1 
 # Your Name: Katia Hemphill
 # Your UMich Email: Katiah@umich.edu
-# Collaborators (if any)
-# -----------------------------------------
+# Collaborators (if any): 
 
 import csv
 def read_csv_file(filename): #reads a CSV file and returns a list of dictionaries
-    with open(filename, newline='', encoding ='utf-8') as csvfile:
+    with open(filename, newline='', encoding ='utf-8') as csvfile: #Ensures that the file is read using UTF-8 encoding, which supports most characters (like accented letters, emojis, etc.).
         reader = csv.DictReader(csvfile)
         data = list(reader)
     return data 
 # --- MAIN PROGRAM ---
+#PART 2
 def main():
     filename = input("SampleSuperstore.csv")
     try:
@@ -27,5 +26,9 @@ def main():
 if __name__ == "__main__":
     main()
 
+#PART 3: DECIDE WHAT TO CALCULATE
+#calculation 1 - "What is the average profit margin on Office Supplies?"
+
+#calculation 2 - "Highest total shipping cost by postal code in a country"
 
 #testing for git commits
