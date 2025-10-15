@@ -2,7 +2,7 @@
 # Name:  Katia Hemphill
 # Student ID: 47379841
 # Email: katiah@umich.edu
-# Collaborators: Kristen May, Carmela Taylor, Myself
+# Collaborators: Myself
 # AI Tools Used: ChatGPT was used to help debug, guide structure, and explain functions, had to understand what UTF-8 encoding meant
 
 #PART 2: Read and Analyze the File
@@ -50,14 +50,15 @@ def calc_sales_by_postal_code(data): # Postal Code, Country, Sales
     return highest, sales_totals[highest]  # returns (state, postal), total sales
 #PART 4
 
-def generate_results_to_csv(result1, result2, filename="results.txt"):
+def generate_results_to_text(result1, result2, filename="results.txt"):
     with open(filename, "w") as file:
         file.write("PROJECT RESULTS\n")
-        file.write("---------------------\n")
-        file.write(f"1. Average Profit Margin for Office Supplies: {result1:.4f}\n")
-        file.write(f"2. Highest Total Sales by Postal Code (United States):\n")
-        file.write(f"   Postal Code: {result2[0]}\n")
-        file.write(f"   Total Sales: ${result2[1]:.2f}\n")
+        file.write("---------------------\n") # Write a separator line to make the output easier to read.
+        file.write(f"1. Average Profit Margin for Office Supplies: {result1:.4f}\n") # formats result1 to 4 decimal places. Example: 0.157264 -> 0.1573
+        file.write(f"2. Highest Total Sales by Postal Code (United States):\n")         # result2 is expected to be a tuple like ("12345", 50000.25)
+        file.write(f"Postal Code: {result2[0]}\n") # This line writes the postal code (first item in the tuple).
+        file.write(f"Total Sales: ${result2[1]:.2f}\n") # This line writes the total sales (second item in the tuple).
+
 
 #PART 5: Problem decomposition - Google Drawing
 
@@ -65,6 +66,11 @@ def generate_results_to_csv(result1, result2, filename="results.txt"):
 
 def test_calc_average_profit_margin_office_supplies():
     # General case 1
+    # Profit margin for each:
+    #   10/100 = 0.1
+    #   20/200 = 0.1
+    # Average = (0.1 + 0.1) / 2 = 0.1
+    # abs() is used to handle floating-point rounding differences.
     data = [
         {"Category": "Office Supplies", "Profit": "10", "Sales": "100"},
         {"Category": "Office Supplies", "Profit": "20", "Sales": "200"},
@@ -84,7 +90,7 @@ def test_calc_average_profit_margin_office_supplies():
     data = [{"Category": "Office Supplies", "Profit": "5", "Sales": "0"}]
     try:
         calc_average_profit_margin_office_supplies(data)
-    except ZeroDivisionError:
+    except ZeroDivisionError: #Error when trying to divide by 0
         pass  # acceptable edge handling
 
     # Edge case 2: no Office Supplies rows
@@ -139,7 +145,7 @@ def main():
 
     result1 = calc_average_profit_margin_office_supplies(data)
     result2 = calc_sales_by_postal_code(data)
-    generate_results_to_csv(result1, result2)
+    generate_results_to_text(result1, result2)
     print("Results written to results.txt")
 
 if __name__ == "__main__":
