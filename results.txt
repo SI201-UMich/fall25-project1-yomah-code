@@ -2,5 +2,5 @@ PROJECT RESULTS
 ---------------------
 1. Average Profit Margin for Office Supplies: 0.1380
 2. Highest Total Sales by Postal Code (United States):
-   Postal Code: 10024
+   Postal Code: ('New York', '10024')
    Total Sales: $78697.18

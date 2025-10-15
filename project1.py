@@ -1,10 +1,13 @@
 # SI 201 Project 1 
-# Your Name: Katia Hemphill
-# Your UMich Email: Katiah@umich.edu
-# Collaborators (if any): 
+# Name:  Katia Hemphill
+# Student ID: 47379841
+# Email: katiah@umich.edu
+# Collaborators: Kristen May, Carmela Taylor, Myself
+# AI Tools Used: ChatGPT was used to help debug, guide structure, and explain functions, had to understand what UTF-8 encoding meant
 
+#PART 2: Read and Analyze the File
 import csv
-def read_csv_file(filename): #reads a CSV file and returns a list of dictionaries
+def load_superstore(filename): #reads a CSV file and returns a list of dictionaries
     with open(filename, newline='', encoding ='utf-8') as csvfile: #Ensures that the file is read using UTF-8 encoding, which supports most characters (like accented letters, emojis, etc.).
         reader = csv.DictReader(csvfile)
         data = list(reader)
@@ -33,19 +36,21 @@ def calc_sales_by_postal_code(data): # Postal Code, Country, Sales
 
     for row in data:
         if row["Country"] == "United States":
+            state = row["State"]             # New column added!
             postal_code = row["Postal Code"]
             sales = float(row["Sales"])
 
-            if postal_code in sales_totals:
-                sales_totals[postal_code] += sales
+            key = (state, postal_code)       # group by BOTH state & postal
+            if key in sales_totals:
+                sales_totals[key] += sales
             else:
-                sales_totals[postal_code] = sales
+                sales_totals[key] = sales
 
-    highest_postal_code = max(sales_totals, key=sales_totals.get)
-    return highest_postal_code, sales_totals[highest_postal_code]
+    highest = max(sales_totals, key=sales_totals.get)
+    return highest, sales_totals[highest]  # returns (state, postal), total sales
 #PART 4
 
-def write_results_to_file(result1, result2, filename="results.txt"):
+def generate_results_to_csv(result1, result2, filename="results.txt"):
     with open(filename, "w") as file:
         file.write("PROJECT RESULTS\n")
         file.write("---------------------\n")
@@ -54,20 +59,7 @@ def write_results_to_file(result1, result2, filename="results.txt"):
         file.write(f"   Postal Code: {result2[0]}\n")
         file.write(f"   Total Sales: ${result2[1]:.2f}\n")
 
-def main():
-    filename = "SampleSuperstore.csv"
-    data = read_csv_file(filename)
-
-    result1 = calc_average_profit_margin_office_supplies(data)
-    result2 = calc_sales_by_postal_code(data)
-    write_results_to_file(result1, result2)
-    print("Results written to results.txt")
-
-if __name__ == "__main__":
-    main()
-
 #PART 5: Problem decomposition - Google Drawing
-
 
 #Part 6 - Test Functions
 
@@ -106,34 +98,33 @@ def test_calc_average_profit_margin_office_supplies():
 def test_calc_sales_by_postal_code():
     # General case 1
     data = [
-        {"Country": "United States", "Postal Code": "12345", "Sales": "100"},
-        {"Country": "United States", "Postal Code": "12345", "Sales": "200"},
+        {"Country": "United States", "State": "California", "Postal Code": "12345", "Sales": "100"},
+        {"Country": "United States", "State": "California", "Postal Code": "12345", "Sales": "200"},
     ]
     result = calc_sales_by_postal_code(data)
-    assert result == ("12345", 300.0)
+    assert result == (("California", "12345"), 300.0)
 
     # General case 2
     data = [
-        {"Country": "United States", "Postal Code": "11111", "Sales": "50"},
-        {"Country": "United States", "Postal Code": "22222", "Sales": "200"},
+        {"Country": "United States", "State": "Texas", "Postal Code": "11111", "Sales": "50"},
+        {"Country": "United States", "State": "Florida", "Postal Code": "22222", "Sales": "200"},
     ]
     result = calc_sales_by_postal_code(data)
-    assert result == ("22222", 200.0)
+    assert result == (("Florida", "22222"), 200.0)
 
     # Edge case 1: no U.S. rows
-    data = [{"Country": "Canada", "Postal Code": "99999", "Sales": "100"}]
+    data = [{"Country": "Canada", "State": "Ontario", "Postal Code": "99999", "Sales": "100"}]
     try:
         calc_sales_by_postal_code(data)
     except ValueError:
         pass  # acceptable edge behavior
 
     # Edge case 2: missing sales values
-    data = [{"Country": "United States", "Postal Code": "11111", "Sales": ""}]
+    data = [{"Country": "United States", "State": "Ohio", "Postal Code": "11111", "Sales": ""}]
     try:
         calc_sales_by_postal_code(data)
     except ValueError:
         pass
-
 
 # Run tests
 test_calc_average_profit_margin_office_supplies()
@@ -142,7 +133,17 @@ print("All tests passed!")
 
 #fixed debugging error in main
 
+def main():
+    filename = "SampleSuperstore.csv"
+    data = load_superstore(filename)
 
+    result1 = calc_average_profit_margin_office_supplies(data)
+    result2 = calc_sales_by_postal_code(data)
+    generate_results_to_csv(result1, result2)
+    print("Results written to results.txt")
+
+if __name__ == "__main__":
+    main()
 
 #testing for git commits
 
