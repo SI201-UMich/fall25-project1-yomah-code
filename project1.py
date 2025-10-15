@@ -58,7 +58,6 @@ def main():
     filename = "SampleSuperstore.csv"
     data = read_csv_file(filename)
 
-    print(list(data[0].keys()))  # adding this  to check column names
     result1 = calc_average_profit_margin_office_supplies(data)
     result2 = calc_sales_by_postal_code(data)
     write_results_to_file(result1, result2)
@@ -141,6 +140,7 @@ test_calc_average_profit_margin_office_supplies()
 test_calc_sales_by_postal_code()
 print("All tests passed!")
 
+#fixed debugging error in main
 
 
 
