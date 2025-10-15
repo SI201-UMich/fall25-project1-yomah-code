@@ -70,6 +70,78 @@ if __name__ == "__main__":
 #PART 5: Problem decomposition - Google Drawing
 
 
+#Part 6 - Test Functions
+
+def test_calc_average_profit_margin_office_supplies():
+    # General case 1
+    data = [
+        {"Category": "Office Supplies", "Profit": "10", "Sales": "100"},
+        {"Category": "Office Supplies", "Profit": "20", "Sales": "200"},
+    ]
+    result = calc_average_profit_margin_office_supplies(data)
+    assert abs(result - 0.1) < 0.0001  # (0.1 + 0.1) / 2
+
+    # General case 2
+    data = [
+        {"Category": "Office Supplies", "Profit": "5", "Sales": "50"},
+        {"Category": "Furniture", "Profit": "100", "Sales": "200"},  # ignored
+    ]
+    result = calc_average_profit_margin_office_supplies(data)
+    assert abs(result - 0.1) < 0.0001
+
+    # Edge case 1: zero sales (avoid division by zero)
+    data = [{"Category": "Office Supplies", "Profit": "5", "Sales": "0"}]
+    try:
+        calc_average_profit_margin_office_supplies(data)
+    except ZeroDivisionError:
+        pass  # acceptable edge handling
+
+    # Edge case 2: no Office Supplies rows
+    data = [{"Category": "Technology", "Profit": "10", "Sales": "100"}]
+    try:
+        calc_average_profit_margin_office_supplies(data)
+    except ZeroDivisionError:
+        pass
+
+
+def test_calc_sales_by_postal_code():
+    # General case 1
+    data = [
+        {"Country": "United States", "Postal Code": "12345", "Sales": "100"},
+        {"Country": "United States", "Postal Code": "12345", "Sales": "200"},
+    ]
+    result = calc_sales_by_postal_code(data)
+    assert result == ("12345", 300.0)
+
+    # General case 2
+    data = [
+        {"Country": "United States", "Postal Code": "11111", "Sales": "50"},
+        {"Country": "United States", "Postal Code": "22222", "Sales": "200"},
+    ]
+    result = calc_sales_by_postal_code(data)
+    assert result == ("22222", 200.0)
+
+    # Edge case 1: no U.S. rows
+    data = [{"Country": "Canada", "Postal Code": "99999", "Sales": "100"}]
+    try:
+        calc_sales_by_postal_code(data)
+    except ValueError:
+        pass  # acceptable edge behavior
+
+    # Edge case 2: missing sales values
+    data = [{"Country": "United States", "Postal Code": "11111", "Sales": ""}]
+    try:
+        calc_sales_by_postal_code(data)
+    except ValueError:
+        pass
+
+
+# Run tests
+test_calc_average_profit_margin_office_supplies()
+test_calc_sales_by_postal_code()
+print("All tests passed!")
+
+
 
 
 #testing for git commits
