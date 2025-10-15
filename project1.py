@@ -9,22 +9,8 @@ def read_csv_file(filename): #reads a CSV file and returns a list of dictionarie
         reader = csv.DictReader(csvfile)
         data = list(reader)
     return data 
-# --- MAIN PROGRAM ---
-#PART 2
-def main():
-    filename = input("SampleSuperstore.csv")
-    try:
-        data = read_csv_file(filename)
-        print("File loaded successfully!")
-        print("Number of rows:", len(data))
-        print("Column names:", list(data[0].keys()))
-        print("Sample row:", data[0])
-    except FileNotFoundError:
-        print("File not found. Make sure the CSV is in this folder and name is correct.")
 
-# Run main
-if __name__ == "__main__":
-    main()
+#PART 2
 
 #PART 3: DECIDE WHAT TO CALCULATE
 #Calculation 1 - "What is the average profit margin on Office Supplies?"
@@ -41,7 +27,7 @@ def calc_average_profit_margin_office_supplies(data):  #Category, Profit, Quanti
             count += 1                 # count rows
             
     average_margin = total_margin / count #add up all margins and divide by count 
-    return total_margin
+    return average_margin
 
 #calculation 2 - "Highest total shipping cost by postal code in a country"
 def calc_highest_total_shipping_cost_by_postal_code(data): #Postal Code, Country, Shipping Cost
@@ -78,17 +64,22 @@ def write_results_to_file(result1, result2, filename="results.txt"):
         file.write(f"   Postal Code: {result2[0]}\n")
         file.write(f"   Total Shipping Cost: ${result2[1]:.2f}\n")
 
+def main():
+    filename = "SampleSuperstore.csv"
+    data = read_csv_file(filename)
+    result1 = calc_average_profit_margin_office_supplies(data)
+    result2 = calc_highest_total_shipping_cost_by_postal_code(data)
+    write_results_to_file(result1, result2)
+    print("Results written to results.txt")
+
+if __name__ == "__main__":
+    main()
 
 
 
 
-    total_shipping_cost = 0 
-    count = 0 
 
-
-
-
-
+    
 
 
 
